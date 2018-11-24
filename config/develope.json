@@ -1,0 +1,21 @@
+{
+  "user": "root",
+  "password": "dbsafer00",
+  "database": "oauth2",
+  "options": {
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "define": {
+      "charset": "utf8mb4",
+      "dialectOptions": {
+        "collate": "utf8mb4_general_ci"
+      }
+    },
+    "pool": {
+      "min": 0,
+      "max": 10,
+      "idle": 10000,
+      "acquire": 10000
+    }
+  }
+}
