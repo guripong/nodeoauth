@@ -28,7 +28,7 @@ router.get('/oauth/authorize', async (req, res, next) => {
     authenticateHandler: {
       handle: (data) => {
         // Whatever you need to do to authorize / retrieve your user from post data here
-        return {id: '1', userName: 'wedul'};
+        return {idx: '1', userName: 'wedul', scope: 'babo'};
       }
     }
   };

@@ -38,6 +38,9 @@ grand type별 확인 방법
     - https://github.com/oauthjs/node-oauth2-server/issues/358
 
 
+- Refresh Token으로 새로운 access_token 발급 요청 인증 방식*
+    - curl -X POST 'http://localhost:3001/oauth/token' -H 'Authorization: Basic YXBwbGljYXRpb246c2VjcmV0' -d 'grant_type=refresh_token' -d 'refresh_token=ad7dfc2f73e6616ac0a96ac812be75adcf31a748'
+
 
 
 
