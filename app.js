@@ -7,12 +7,18 @@ const logger = require('morgan');
 const usersRouter = require('./routes/oauth2');
 
 const app = express();
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 
 app.use('/', usersRouter);
 
@@ -32,4 +38,10 @@ app.use(function(err, req, res, next) {
   res.json({error:'error'});
 });
 
+const port = 3001;
+const myip = "0.0.0.0";
+//const myip ="127.0.0.1";
+app.listen(port, myip, function () {
+  console.log('Connected ' + myip + ' \'s ' + port + ' port!!!');
+});
 module.exports = app;

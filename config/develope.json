@@ -1,9 +1,9 @@
 {
-  "user": "root",
-  "password": "dbsafer00",
-  "database": "oauth2",
+  "user": "eduaiadmin",
+  "password": "1a2ijace!!",
+  "database": "EDUAI",
   "options": {
-    "host": "127.0.0.1",
+    "host": "ls-1385208b74ac4933242088a5f846166785295ccb.cbnpdrzxd040.us-east-1.rds.amazonaws.com",
     "dialect": "mysql",
     "timezone": "+09:00",
     "define": {
