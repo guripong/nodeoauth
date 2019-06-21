@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 var mysql = require('promise-mysql');
-var url=require('url');
 
+var util = require('util');
 const OAuth2Server = require('oauth2-server');
 const Request = OAuth2Server.Request;
 const Response = OAuth2Server.Response;
@@ -18,14 +18,30 @@ router.get('/', function(req, res, next) {
 
 router.get('/login', function(req, res, next) {
  
+  console.log('@@@@/login@@@@');
+  console.log('/login 의 param:',req.query);
 
-  res.render('login', { title: '장비로그인',msg: '로긴해주세요' });
+  res.render('login',
+   { 
+     title: '장비로그인',
+     msg: '로긴해주세요',
+     redirect: req.query.redirect,
+     client_id: req.query.client_id,
+     redirect_uri: req.query.redirect_uri,
+     state:req.query.state,
+     response_type:req.query.response_type
+    });
 });
+
 
 router.post('/login',function(req,res,next){
   var sess = req.session;
+  console.log('총바디:',req.body);
+
   console.log('아이디',req.body.user_id);
   console.log('패스와드',req.body.user_pwd);
+
+
   var sql=`SELECT idx,scope FROM EDUAI.user where user_name="`+req.body.user_id+`" and password="`+req.body.user_pwd+`";`;
   var connection;
 
@@ -38,21 +54,38 @@ router.post('/login',function(req,res,next){
     results = JSON.parse(JSON.stringify(results));
     results = results[0];
     //console.log(`아아악:`,results);
-    
+
     if(!results)
     {
-      res.render('login', { title: '장비로그인',msg: '아디비번틀렸어용' });
+      res.render('login', {
+        title: '장비로그인',
+        msg: '아디비번틀렸어용',
+        redirect: req.body.redirect,
+        client_id: req.body.client_id,
+        redirect_uri: req.body.redirect_uri,
+        state: req.body.state,
+        response_type:req.body.response_type
+      });
     }
     else{
+    
+//      res.send("합격");
+      console.log("DB에서 가져옴성공:"+JSON.stringify(results));
+    
       sess.useridx=results.idx;
       sess.username=req.body.user_id;
+      var tempaddress = "/oauth/authorize?"+"client_id="+req.body.client_id+"&redirect_uri="+req.body.redirect_uri+"&state="+req.body.state+"&response_type="+req.body.response_type;
 
-      res.redirect('/oauth/authorize?client_id='+sess.clientid+'&redirect_uri='+sess.redirect_uri+'&scope='+sess.scope+'&response_type='+sess.response_type+'&state='+sess.state);
-//      sess.clientid =query.client_id;
-//      sess.redirect_uri = query.redirect_uri;
-//      sess.scope = query.scope;
-//      sess.response_type=query.response_type;
-//      sess.state=query.state;
+      if(results.scope){
+        tempaddress = tempaddress+"&scope="+results.scope;
+        sess.scope=results.scope;
+      }
+
+      console.log("로그인성공..리다이렉트할곳 : "+tempaddress);
+      res.redirect(tempaddress);
+
+
+
     }
  
 
@@ -73,46 +106,37 @@ router.post('/api',function(req, res, next) {
 
 router.get('/oauth/authorize', async (req, res, next) => {
   var sess = req.session;
+  console.log('@@@@@/oauth/authorize@@@@@@@@@@@@@@');
+  console.log('/oauth/authorize의 param:',req.query);
+  console.log('세션확인:'+JSON.stringify(sess));
 
-
+  //@@@@세션말구  req.query.username으로 수정하고
+  // 애초에 id,pw 같이 주면 ->로긴확인후 ->토큰
 
   if(sess.username&&sess.useridx){
     console.log('저장인덱스',sess.useridx);
+    console.log('가져온것 /oauth/authorize 성공:',req.query);
+
     const request = new Request(req);
     const response = new Response(res);
     const options = {
       authenticateHandler: {
         handle: (data) => {
-   
-          //res.locals.message = err.message;
-          //res.locals.error = req.app.get('env') === 'development' ? err : {};
-         
-  //        res.status(200);
-  //        res.render('index', { title: '' });
-          console.log('야바디:',req.body);
-  
-          //단 이 모든과정은 로그인 통과시에...
-          //이대로 저장하게됨 넘겨온거 받아옵시다..
           return {idx: sess.useridx, userName:sess.username, scope:sess.scope};
           //return {idx: '1', userName: 'wedul112', scope: 'babo'};
         }
       }
     };
-   // console.log('요청:',request);
+
     try {
-      ///이게 먼저 시작
-      //console.log('야!',await oauth.authorize(request, response, options));
       //await oauth.authorize(request, response, options);
       oauth.authorize(request, response, options).then(function(results){
         console.log("코드생성완료"+JSON.stringify(results));
-
-        //console.log('야야 uri 콜백보자:'+sess.redirect_uri);
         console.log('태스트오스 코드생성후응답:'+results.redirectUri+'?code='+results.authorizationCode+'&state='+sess.state);
+        //res.send('태스트오스 코드생성후응답:'+results.redirectUri+'?code='+results.authorizationCode+'&state='+sess.state);
         res.redirect(results.redirectUri+'?code='+results.authorizationCode+'&state='+sess.state);
-        //res.json(results);
-      })
-//      res.json(await oauth.authorize(request, response, options));
-      //res.redirect('/');
+       
+      });
 
     } catch (e) {
         
@@ -122,51 +146,117 @@ router.get('/oauth/authorize', async (req, res, next) => {
     
   }
   else{
-    var uri = req.url;
-    var query = url.parse(uri,true).query;
-    console.log(query);
-    //console.log('여기바',query.client_id);
-    //console.log('여기바',query.redirect_uri);
-    //console.log('여기바',query.scope);
-    //console.log('여기바',query.response_type);
-    //console.log('여기바',query.state);
-    sess.clientid =query.client_id;
-    sess.redirect_uri = query.redirect_uri;
-    sess.scope = query.scope;
-    sess.response_type=query.response_type;
-    sess.state=query.state;
+    console.log('야req.query:',req.query);
+    sess.clientid =req.query.client_id;
+    sess.redirect_uri = req.query.redirect_uri;
+    sess.response_type=req.query.response_type;
+    sess.state=req.query.state;
+
     //sess.beforereq = req;
-    res.redirect('/login');
+    res.redirect(util.format('/login?redirect=%s&client_id=%s&redirect_uri=%s&state=%s&response_type=%s'
+    , req.path, req.query.client_id, req.query.redirect_uri,req.query.state,req.query.response_type));
   }
 
 });
 
+
+
+
+// Post token.
+
+
+
 router.post('/oauth/token', async (req, res, next) => {
   var uri = req.url;
-  //var query = url.parse(uri,true).query;
-  console.log('다음은uri:'+uri);
+  var sess= req.session;
+  console.log(uri);
+//  새로운세션임
+//  console.log('/oauth/token => 세션:');
+//  console.log(sess);
 
+  console.log('/oauth/token =>받아온바디:');
+  console.log(req.body);
+  console.log("@@@@@@@@@@@@@@/oauth/token  post함@@@@@");
   const request = new Request(req);
   const response = new Response(res);
-  
-  try {
-    //res.json(await oauth.token(request, response));
-    res.json(await oauth.token(request, response));
+  await oauth.token(request,response).then(function(results){
 
-    /*
-    oauth.token(request, response).then(function(results){
-      console.log("토큰생성완료"+JSON.stringify(results));
-      return res.json({
-      });
+    console.log(results);
+  
+    console.log("@@@@@@@@@@@");
+
+    return res.send(results);
+  });
+  /*
+  return oauth.token(request, response).then(function(results){
+    console.log("야 여기 동작하는지봐라");
+    console.log("@@@@@@@@@@@");
+    var cache = [];
+    var ppp=JSON.stringify(res.locals, function(key, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                // Duplicate reference found, discard key
+                return;
+            }
+            // Store value in our collection
+            cache.push(value);
+        }
+        return value;
     });
-    */
+    cache = null; // Enable garbage collection
+    res.locals ={tokenType:"iloveyou"};
+   // console.log("@:"+ppp);
+//    res.locals.oauth = {tokenType: "iloveyou"};
+//      res.locals.user = req.session.user;
+//      res.locals ={tokenType:"iloveyou"};
+    console.log("@@@@@@@@@@@");
+    res.json(results);
+  });
+  */
+
+  /*
+  try{
+    oauth.token(request, response).then(function(results){
+      console.log("야 여기 동작하는지봐라");
+      console.log("@@@@@@@@@@@");
+      var cache = [];
+      var ppp=JSON.stringify(res.locals, function(key, value) {
+          if (typeof value === 'object' && value !== null) {
+              if (cache.indexOf(value) !== -1) {
+                  // Duplicate reference found, discard key
+                  return;
+              }
+              // Store value in our collection
+              cache.push(value);
+          }
+          return value;
+      });
+      cache = null; // Enable garbage collection
+      res.locals ={tokenType:"iloveyou"};
+     // console.log("@:"+ppp);
+  //    res.locals.oauth = {tokenType: "iloveyou"};
+//      res.locals.user = req.session.user;
+//      res.locals ={tokenType:"iloveyou"};
+      console.log("@@@@@@@@@@@");
+      
+      res.redirect("");
+      
+      //res.json(results);
+    })
+
+   // res.json(await oauth.token(request, response));
+
+ 
 
   } catch (e) {
     console.log(e);
     next(e);
   }
+  */
 
 });
+
+
 
 module.exports = router;
 var config = {
