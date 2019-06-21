@@ -2,145 +2,179 @@
 <html>
 
 <head>
-	<title>
-		<%=title%>
-	</title>
+    <title>
+        <%=title%>
+    </title>
 
 
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!--===============================================================================================-->
-	<!--<script src='https://www.google.com/recaptcha/api.js'></script>-->
-	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="/images/icons/favicon_KPS.ico" />
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/vendor/bootstrap/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/fonts/iconic/css/material-design-iconic-font.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/vendor/animate/animate.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/vendor/css-hamburgers/hamburgers.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/vendor/animsition/css/animsition.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/vendor/select2/select2.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/vendor/daterangepicker/daterangepicker.css">
-	<!--===============================================================================================-->
-	<!--===============================================================================================-->
-	<link rel='stylesheet' href='/stylesheets/login.css' />
-	<link rel='stylesheet' href='/stylesheets/util.css' />
-	<!--jquery-3.1.1.min.js-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <!--<script src='https://www.google.com/recaptcha/api.js'></script>-->
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="/images/icons/favicon_KPS.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <!--===============================================================================================-->
+    <link rel='stylesheet' href='/stylesheets/login.css' />
+    <link rel='stylesheet' href='/stylesheets/util.css' />
+    <!--jquery-3.1.1.min.js-->
     <script src='/javascripts/jquery-3.1.1.min.js'></script>
-	
+
 </head>
 
 <body>
 
 
-        <div class="limiter">
-     
-                <div class="container-login100">
-                    <div class="wrap-login100">
-                            <form id="demo-form" class="login100-form validate-form" action="/login" method="post">
-                    
-                                <!--폴리마크-->
-                                <span class="login100-form-title p-b-48">
-                                    <img src="/images/icons/smallpoly.png" />
-                                </span>
-                                <!--메세지-->
-                                <span class="login100-form-title p-b-26">
-                                        EDU-AI  Lab
-                                        Alexa Device Login
-                                    </span>
-            
-            
-                <!-- 아이디 입력-->
-                <div class="wrap-input100 validate-input" data-validate="Enter ID">
+    <div class="limiter">
+
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <form id="demo-form" class="login100-form validate-form" action="/login" method="post">
+
+                    <!--폴리마크-->
+                    <span class="login100-form-title p-b-48">
+                        <img src="/images/icons/smallpoly.png" />
+                    </span>
+                    <!--메세지-->
+                    <span class="login100-form-title p-b-26" id="text_alexa">
+                            Alexa
+                   
+                    </span>
+                  
+                    <span class="login100-form-title p-b-26" id="text_device_login">
+                            Device Login
+                    </span>
+
+
+                    <!-- 아이디 입력-->
+                    <div class="wrap-input100 validate-input" data-validate="Enter ID" id='id_div'>
                         <input class="input100" type="text" name="user_id" id="user_id">
-                        <span class="focus-input100" data-placeholder="ID"></span>
+                        <span class="focus-input100" data-placeholder="Device ID"></span>
                     </div>
 
                     <!--패스워드 입력-->
-                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                    <div class="wrap-input100 validate-input" data-validate="Enter password" id='pw_div'>
                         <span class="btn-show-pass">
                             <i class="zmdi zmdi-eye"></i>
                         </span>
                         <input class="input100" type="password" name="user_pwd" id="user_pwd">
                         <span class="focus-input100" data-placeholder="Password"></span>
-                        <input style="display:none"; name="client_id" id="client_id" value="<%=client_id%>">
-                        <input style="display:none"; name="redirect" id="redirect" value="<%=redirect%>">
-                        <input style="display:none"; name="redirect_uri" id="redirect_uri" value="<%=redirect_uri%>">
-                        <input style="display:none"; name="state" id="state" value="<%=state%>">
-                        <input style="display:none"; name="response_type" id="response_type" value="<%=response_type%>">
+                        <input style="display:none" ; name="client_id" id="client_id" value="<%=client_id%>">
+                        <input style="display:none" ; name="redirect" id="redirect" value="<%=redirect%>">
+                        <input style="display:none" ; name="redirect_uri" id="redirect_uri" value="<%=redirect_uri%>">
+                        <input style="display:none" ; name="state" id="state" value="<%=state%>">
+                        <input style="display:none" ; name="response_type" id="response_type"
+                            value="<%=response_type%>">
                     </div>
 
 
-                    
+
                     <!--로그인버튼-->
 
 
-                      <div style="text-align:center">
-                            <span class="txt2">
-                                <a><%=msg%></a>
-                               
-                            </span>
-                            
-                    
-                        </div>
-    
-                        <div class="container-login100-form-btn">
-                            <div class="wrap-login100-form-btn">
-                                <div class="login100-form-bgbtn"></div>
-                                <button class="login100-form-btn" id='loginbutton'>
-                                    Login
-                                </button>
+                    <div style="text-align:center">
+                        <span class="txt2">
+                            <a id='real_msg'><%=msg%></a>
+                            <div  id='loading_img' style="display:none;">
+                                    <img src='/images/loading.gif'/>
                             </div>
-                        </div>
-    
-                        <div class="text-center p-t-115">
-                            <span class="txt1">
-                                KOREA POLY School Co.
-                            </span>
-                            <a class="txt2" href="#">
-                         
-                            
-                        </div>
-                                
-        
-                            </form>
-                       
-                            
-        
+                        </span>
+                     
+
                     </div>
-                </div>
+
+                    <div class="container-login100-form-btn" id='btn_div'>
+                        <div class="wrap-login100-form-btn">
+                            <div class="login100-form-bgbtn"></div>
+                            <button class="login100-form-btn" id='loginbutton'>
+                                Login
+                            </button>
+
+                            <!-- <input type="button" class="login100-form-btn" id='loginbutton' value="Login"/>-->
+                        </div>
+                    </div>
+
+                    <div class="text-center p-t-115" id='bottom_msg' >
+                        <span class="txt1">
+                            KOREA POLY School Co.
+                        </span>
+                        <a class="txt2" href="#">
+
+
+                    </div>
+
+
+                </form>
+
+
+
             </div>
+        </div>
+    </div>
 
 
-	<script type="text/javascript">
-        
-  
-	</script>
+    <script type="text/javascript">
+        $(document).on('click', '#loginbutton', function () {
+            //user_pwd  , user_id
+
+            if ($('#user_pwd').val() && $('#user_id').val()) {
+              
+                //alert("시도중");
+             
+                //$('#pw_div').empty();
+                $('#demo-form').on("submit",function(){
+                    $('#text_device_login').html("Loading");
+                    $('#text_alexa').html("Wait a second!")
+                    $('#btn_div').remove();
+                    $('#id_div').css("display","none");
+                    $('#pw_div').css("display","none");
+                    $('#real_msg').remove();
+                    $('#loading_img').css('display',"");
+                
+                });
+               
+               
+
+              
+               
+                
+               
+            }
+        });
+    </script>
 
 
-	<!--===============================================================================================-->
-	<script src="/stylesheets/vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="/stylesheets/vendor/bootstrap/js/popper.js"></script>
-	<script src="/stylesheets/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="/stylesheets/vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="/stylesheets/vendor/daterangepicker/moment.min.js"></script>
-	<script src="/stylesheets/vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="/stylesheets/vendor/countdowntime/countdowntime.js"></script>
-	<!--===============================================================================================-->
-	<script src="/javascripts/main.js"></script>
-	
+    <!--===============================================================================================-->
+    <script src="/stylesheets/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/stylesheets/vendor/bootstrap/js/popper.js"></script>
+    <script src="/stylesheets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/stylesheets/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="/stylesheets/vendor/daterangepicker/moment.min.js"></script>
+    <script src="/stylesheets/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="/stylesheets/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="/javascripts/main.js"></script>
+
 
 </body>
 

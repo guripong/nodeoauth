@@ -23,8 +23,8 @@ router.get('/login', function(req, res, next) {
 
   res.render('login',
    { 
-     title: '장비로그인',
-     msg: '로긴해주세요',
+     title: 'POLY ALEXA Device Login',
+     msg: 'Login Please!',
      redirect: req.query.redirect,
      client_id: req.query.client_id,
      redirect_uri: req.query.redirect_uri,
@@ -58,8 +58,8 @@ router.post('/login',function(req,res,next){
     if(!results)
     {
       res.render('login', {
-        title: '장비로그인',
-        msg: '아디비번틀렸어용',
+        title: 'POLY ALEXA Device Login',
+        msg: 'Please Enter ID and PW',
         redirect: req.body.redirect,
         client_id: req.body.client_id,
         redirect_uri: req.body.redirect_uri,
