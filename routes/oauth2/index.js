@@ -136,6 +136,15 @@ router.get('/oauth/authorize', async (req, res, next) => {
         //res.send('태스트오스 코드생성후응답:'+results.redirectUri+'?code='+results.authorizationCode+'&state='+sess.state);
         res.redirect(results.redirectUri+'?code='+results.authorizationCode+'&state='+sess.state);
        
+      }).then(function(results){
+        req.session.destroy(function (err) {
+          if (err) {
+            console.log("#############세션삭제에러#########")
+            console.log(err);
+          } else {
+            console.log("#############세션삭제성공#########")
+          }
+        });
       });
 
     } catch (e) {
@@ -172,7 +181,8 @@ router.post('/oauth/token', async (req, res, next) => {
   console.log(uri);
 //  새로운세션임
 //  console.log('/oauth/token => 세션:');
-//  console.log(sess);
+  console.log("토큰의세션확인");
+  console.log(sess);
 
   console.log('/oauth/token =>받아온바디:');
   console.log(req.body);
@@ -186,6 +196,15 @@ router.post('/oauth/token', async (req, res, next) => {
     console.log("@@@@@@@@@@@");
 
     return res.send(results);
+  }).then(function(){
+    req.session.destroy(function (err) {
+      if (err) {
+        console.log("#############세션삭제에러#########")
+        console.log(err);
+      } else {
+        console.log("#############세션삭제성공#########")
+      }
+    });
   });
   /*
   return oauth.token(request, response).then(function(results){
