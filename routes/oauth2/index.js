@@ -59,7 +59,7 @@ router.post('/login',function(req,res,next){
     {
       res.render('login', {
         title: 'POLY ALEXA Device Login',
-        msg: 'Please Enter ID and PW',
+        msg: 'Check your ID or P/W.',
         redirect: req.body.redirect,
         client_id: req.body.client_id,
         redirect_uri: req.body.redirect_uri,
